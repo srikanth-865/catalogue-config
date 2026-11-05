@@ -1,22 +1,22 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: catalogue
   namespace: {{ .Values.namespace }}
-  # labels related to deployment resource
+  # these labels are replicaset labels
   labels:
     project: roboshop
     tier: backend
     component: catalogue
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployment.replicas }}
   selector:
+    # using these labels replica set selects the pod
     matchLabels:
       project: roboshop
       tier: backend
       component: catalogue
-  # Pod
+  # This is pod definition, pod is subset of replicaset
   template:
     metadata:
       labels:
@@ -26,7 +26,8 @@ spec:
     spec:
       containers:
       - name: catalogue
-        image: "{{ .Values.deployment.imageRepo }}:{{ .Values.deployment.imageVersion }}"
+        image: "{{ .Values.deployment.imageName }}:{{ .Values.deployment.imageVersion }}"
+        imagePullPolicy: Always # safe to pull everytime, there may be images with same version rebuilt and pushed
         resources:
           requests:
             cpu: "100m"
@@ -34,7 +35,7 @@ spec:
           limits:
             cpu: "100m"
             memory: "128Mi"
-          readinessProbe:
+        readinessProbe:
           # httpGet:
           #   path: /health
           #   port: 8080

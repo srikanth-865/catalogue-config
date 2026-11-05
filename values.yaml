@@ -1,7 +1,6 @@
-configmap:
-  mongodbUrl: "mongodb://mongodb:27017/catalogue"
+configMap:
+  MONGO_URL: "mongodb://mongodb:27017/catalogue"
 deployment:
-  imageRepo: 649695269406.dkr.ecr.us-east-1.amazonaws.com/roboshop/catalogue
-  imageVersion: latest
-hpa:
-  cpuPercentage: 80
+  replicas: "1"
+  imageName: "160885265516.dkr.ecr.us-east-1.amazonaws.com/roboshop/catalogue"
+  
